@@ -7,10 +7,10 @@
 #this Makefile goes in the CPSC350-Game-of-Life directory
 
 
-EXECUTABLE := assignment2
+EXECUTABLE := assignment4
 
 # the source files to be built
-SOURCES := GameOfLifeMain.cpp
+SOURCES := RegistrarMain.cpp
 
 #stuff you don't need to worry about
 INCLUDES := -I ../include
