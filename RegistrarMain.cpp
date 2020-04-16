@@ -1,9 +1,7 @@
 //#include "doubly1.cpp"
 //#include "doublylinkedlist1.cpp"
+#include "Queue.cpp"
 #include<fstream>
-#include <iostream>
-
-
 
 using namespace std;
 
@@ -15,7 +13,7 @@ string inputfileName;
 cin >> inputfileName;
 
   string Line;
-  int windowsOpen;
+  int windows;
   bool timeGoing=true;
   int clocktick;
   int studentArrive;
@@ -23,8 +21,11 @@ cin >> inputfileName;
   int lineNumber=0;
   int OpenWindow=0;
   int studentID=0;
-  //store time student spend at window into window queue
-  ///////////Queue *WindowQueue = new Queue(10);
+  int windowID=0;
+  int studentInline=0;
+  //queue size is the same as total window size
+  Queue *WindowQueue = new Queue(windows);
+  Queue *inlineStudent = new Queue(100);
 //open file and read from it
   ifstream InputFile;
   InputFile.open(inputfileName);
@@ -42,8 +43,17 @@ else if(InputFile)
     //read the first line from input file
     getline(InputFile, Line, '\n');
     //convert string to int
-    windowsOpen = stoi(Line);
-    cout << "there are " << windowsOpen << " windows open" << endl;
+    windows = stoi(Line);
+    cout << "there are " << windows << " windows in total" << endl;
+    //add all windows into queue, and remove each window when it's occupied
+    for (int b=0; b<windows; b++)
+    {
+      windowID=windowID+1;
+      //keep track of the number of open window
+      OpenWindow=OpenWindow+1;
+      WindowQueue->insert(windowID);
+      cout<< "insert" << endl;
+    }// end b for
 
 //put this part in a loop too
 while (timeGoing){
@@ -69,19 +79,54 @@ while (timeGoing){
     for(int a=0; a<studentArrive; a++)
     {
       studentID=studentID+1;
+      //keep track of the number of students inline
+      studentInline=studentInline+1;
+      //put all students who arrive into queue to wait in line, remove from queue when it's that student's turn
+      inlineStudent->insert(studentID);
+      cout << "insert student" << endl;
       getline(InputFile, Line, '\n');
       //convert string to int
       windowTime = stoi(Line);
       cout << "student " << studentID << " spend " << windowTime << " clocktick at the window" << endl;
+  } // end a for
 
+  //while there are still open window
+  while (OpenWindow>0){
+    if(!inlineStudent->isEmpty()){
+     //there are students inline, remove student with each matching window from queue
+     inlineStudent->remove();
+     //keep track of the number of students in line
+     studentInline=studentInline-1;
+     cout << "remove inline student" << endl;
+     WindowQueue->remove();
+     //keep track of the number of open window
+     OpenWindow=OpenWindow-1;
+     cout << "remove open window" << endl;
+   }// end if
+   //there is no students inline
+   else if (inlineStudent->isEmpty())
+   {
+     cout << "window idle" << endl;
+     break;
+   }//end else if
+ }//end while
+ //there is no open window
+   while(OpenWindow<=0){
+   //there are students inline
+    if (!inlineStudent->isEmpty())
+   {
+     cout << "no open window, students are waiting inline" << endl;
+     break;
+   }// end if
+   //no student inline
+   else if(inlineStudent->isEmpty())
+   {
+     cout << "great use of resources!" << endl;
+     break;
+   }//end else if
+ }//end while
 
-
-      //store time each student spend at window into queue
-    /////  WindowQueue->insert(Line);
-  } // end for
 }//end while
-
-    //store number of students that arrive at that time into variables or queue??
 
 }//end else if (successfully open file )
 
@@ -92,4 +137,4 @@ while (timeGoing){
 
 
   return 0;
-}
+}//end main
