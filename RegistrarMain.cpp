@@ -22,7 +22,11 @@ cin >> inputfileName;
   int OpenWindow=0;
   int studentID=0;
   int windowID=0;
+  int inlineID=0;
+  int OpenWindowID=0;
   int studentInline=0;
+  //the total time need to simulate the program for
+  int totaltime=0;
   //queue size is the same as total window size
   Queue *WindowQueue = new Queue(windows);
   Queue *inlineStudent = new Queue(100);
@@ -97,11 +101,13 @@ while (timeGoing){
      inlineStudent->remove();
      //keep track of the number of students in line
      studentInline=studentInline-1;
-     cout << "remove inline student" << endl;
+     inlineID=inlineID+1;
+     cout << "remove inline student" << inlineID << endl;
      WindowQueue->remove();
      //keep track of the number of open window
      OpenWindow=OpenWindow-1;
-     cout << "remove open window" << endl;
+     OpenWindowID=OpenWindowID+1;
+     cout << "remove open window" << OpenWindowID << endl;
    }// end if
    //there is no students inline
    else if (inlineStudent->isEmpty())
