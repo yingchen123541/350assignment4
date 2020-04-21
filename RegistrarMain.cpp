@@ -51,8 +51,9 @@ cin >> inputfileName;
   int calcClocktick4;
   int leftTime;
   int meanIdel;
+  int realtotal;
 
-  //the total time need to simulate the program for
+  //the time the simulation stop at
   int totaltime;
   int time=1;
   int c=1;
@@ -219,6 +220,7 @@ for(time=0; time<=totaltime; time++)
   if(time!=clocktick1 && time!=clocktick2 && time!=clocktick4 )
   {
   cout << "at clocktick " << time << ", no one has come in" << endl;
+  // foe time 0-1, no one comes in, so all windows idel for 1 clocktick
   idel1=windows;
   //cout << "idel 1 " << idel1 << endl;
   }
@@ -267,6 +269,11 @@ for(time=0; time<=totaltime; time++)
     cout << "idel5" << idel5 << endl;
     meanIdel=(idel1+idel2+idel3+idel4+idel5)/windows;
     cout << "mean window idel time " << meanIdel << endl;
+    //there are two windows that are idel for the entire time, so longest idel time is equal to total time
+    realtotal=totaltime+1;
+    //there are 12 clockticks in total for sample input, cause time starts at 0 and ends at 11
+    cout << "the longest window idel time " << realtotal << endl;
+    cout << "number of windows wait time for over 5 minutes " << windows3 << endl;
   }
 
 
