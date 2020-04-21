@@ -33,8 +33,12 @@ cin >> inputfileName;
   int d=0;
   int reopen;
   int reopen1;
+  //total idel time for all windows
+  int totalIdelTime;
+  int calcClocktick2;
+
   //the total time need to simulate the program for
-  int totaltime=12;
+  int totaltime;
   int time=1;
   int c=1;
   //queue size is the same as total window size
@@ -90,8 +94,7 @@ while (timeGoing){
     {
       clocktick2 = stoi(Line);
     }
-
-    //cout <<"at clocktick " << clocktick << endl;
+    calcClocktick2=clocktick2;
 
     //read the third line from input file
     getline(InputFile, Line, '\n');
@@ -116,6 +119,9 @@ while (timeGoing){
       windowTime0 = stoi(Line);
       Windowtime->insert(windowTime0);
   } // end a for
+  //total time need to run the simulation for 
+  totaltime=windowTime0-(calcClocktick2-clocktick1)+calcClocktick2;
+  cout << totaltime << "total time" << endl;
 } //end c if
 else if(c==2)
 {
@@ -186,6 +192,7 @@ for(time=0; time<=totaltime; time++)
   if(time!=clocktick1 && time!=clocktick2)
   {
   cout << "at clocktick " << time << ", no one has come in, number of open windows " << windows << endl;
+  totalIdelTime=windows;
   }
   else if (time==clocktick1)
   {
@@ -215,6 +222,7 @@ for(time=0; time<=totaltime; time++)
       cout << "window " << d <<" will reopen at clocktick " << reopen1 << endl;
     }
   }
+
 }
 
 
