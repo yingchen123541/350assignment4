@@ -19,8 +19,8 @@ using namespace std;
 
 //this main file get file name from user input
 //cause my docker is not working, and my command line argument used to work when I ran in docker
-//please grade RegistrarMain2.cpp (the one with command line argument) if it compiles
-//other wise please grade RegistrarMain1.cpp if RegistrarMain2.cpp doesn't compile
+//please grade RegistrarMain.cpp (the one with command line argument) if it compiles
+//other wise please grade RegistrarMain1.cpp if RegistrarMain.cpp doesn't compile
 int main(int argc, char** argv) {
 
   //string inputfileName= argv[1];
@@ -301,7 +301,7 @@ for(time=0; time<=totaltime; time++)
 
 
 
-}// end simulation for 
+}// end simulation for
 
 
 
