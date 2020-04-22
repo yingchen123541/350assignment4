@@ -1,10 +1,26 @@
-//#include "doubly1.cpp"
-//#include "doublylinkedlist1.cpp"
 #include "Queue.cpp"
 #include<fstream>
 
+/** RegistrarMain.cpp
+* Name: Yuki Chen
+* Student ID: 2320235
+* Email: yingchen@chapman.edu
+*
+* Assignment4  Registrar’s Office Simulation
+* purpose: simulate students and windows conditions in the registrar office
+* read from a file to get the number of students come in and the time they spend at the windows
+* output statistics of window idel and student wait time
+* Version 3.0
+* Date: April 22, 2020
+*
+*/
+
 using namespace std;
 
+//this main file get file name from user input
+//cause my docker is not working, and my command line argument used to work when I ran in docker
+//please grade RegistrarMain2.cpp (the one with command line argument) if it compiles
+//other wise please grade RegistrarMain1.cpp if RegistrarMain2.cpp doesn't compile
 int main(int argc, char** argv) {
 
   //string inputfileName= argv[1];
@@ -12,7 +28,7 @@ int main(int argc, char** argv) {
 cout << "enter file name" << endl;
 string inputfileName;
 cin >> inputfileName;
-
+//initialize variables
   string Line;
   int windows;
   int windows1;
@@ -52,7 +68,10 @@ cin >> inputfileName;
   int leftTime;
   int meanIdel;
   int realtotal;
-
+  int meanWait=0;
+  int medianWait=0;
+  int longestWait=0;
+  int overTen=0;
   //the time the simulation stop at
   int totaltime;
   int time=1;
@@ -80,7 +99,6 @@ else if(InputFile)
     getline(InputFile, Line, '\n');
     //convert string to int
     windows = stoi(Line);
-    cout << "there are " << windows << " windows in total" << endl;
     //add all windows into queue, and remove each window when it's occupied
     for (int b=0; b<windows; b++)
     {
@@ -88,17 +106,14 @@ else if(InputFile)
       //keep track of the number of open window
       OpenWindow=OpenWindow+1;
       WindowQueue->insert(windowID);
-    //  cout<< "insert" << endl;
     }// end b for
 
-//put this part in a loop too
 while (timeGoing){
     //read the second line from input file
     getline(InputFile, Line, '\n');
 //check whether have already reached the last line
     if(Line.empty())
     {
-      cout << "reach the last line, stop reading" << endl;
       break;
     }
     //convert string to int
@@ -119,8 +134,6 @@ while (timeGoing){
     {
       studentArrive1 = stoi(Line);
 
-    //cout << studentArrive << " students arrive" << endl;
-
     //loop the number of student arrive time to get window time for each student
     for(int a=0; a<studentArrive1; a++)
     {
@@ -129,13 +142,11 @@ while (timeGoing){
       studentInline=studentInline+1;
       //put all students who arrive into queue to wait in line, remove from queue when it's that student's turn
       inlineStudent->insert(studentID);
-      //cout << "insert student" << endl;
       getline(InputFile, Line, '\n');
       //convert string to int
       if(a==0){
       windowTime0 = stoi(Line);
       Windowtime->insert(windowTime0);
-      cout << windowTime0 << "windowTime0" << endl;
     }
       else if(a==1){
       windowTime3 = stoi(Line);
@@ -144,7 +155,6 @@ while (timeGoing){
   } // end a for
   //total time need to run the simulation for
   totaltime=windowTime3-(calcClocktick2-clocktick1)+calcClocktick2;
-  cout << totaltime << "total time" << endl;
 } //end c if
 else if(c==2)
 {
@@ -164,8 +174,6 @@ else if(c==2)
 } // end a for
 }//end c=2
 
-
-
   //while there are still open window
   while (OpenWindow>0){
     if(!inlineStudent->isEmpty()){
@@ -174,17 +182,16 @@ else if(c==2)
      //keep track of the number of students in line
      studentInline=studentInline-1;
      inlineID=inlineID+1;
-    // cout << "remove inline student" << inlineID << endl;
+    //remove open window
      WindowQueue->remove();
      //keep track of the number of open window
      OpenWindow=OpenWindow-1;
      OpenWindowID=OpenWindowID+1;
-    // cout << "remove open window" << OpenWindowID << endl;
    }// end if
    //there is no students inline
    else if (inlineStudent->isEmpty())
    {
-     cout << "window idle" << endl;
+     //window idel, no student in line
      break;
    }//end else if
  }//end while
@@ -207,66 +214,67 @@ else if(c==2)
 c++;
 
 
-}//end time going whike
+}//end time going while
 leftTime=windowTime0-(calcClocktick2-clocktick1);
 clocktick3=leftTime+calcClocktick2;
-cout << "clocktick3 " << clocktick3 << endl;
-
 }//end open file else if
 
 //simulation
 for(time=0; time<=totaltime; time++)
 {
-  if(time!=clocktick1 && time!=clocktick2 && time!=clocktick4 )
+  //new student come in at clocktick 1 and 3, student leaves and window reopen at clocktick4
+  if(time!=clocktick1 && time!=clocktick2 && time!=clocktick4 && time!=totaltime )
   {
-  cout << "at clocktick " << time << ", no one has come in" << endl;
-  // foe time 0-1, no one comes in, so all windows idel for 1 clocktick
+    //no student comes in at certain clocktick
+  //cout << "at clocktick " << time << ", no one has come in" << endl;
+  // for time 0-1, no one comes in, so all windows idel for 1 clocktick
   idel1=windows;
-  //cout << "idel 1 " << idel1 << endl;
   }
   else if (time==clocktick1)
   {
     windows1=windows-studentArrive1;
+    //calculate the idel time for each window
     idel2=windows1*(calcClocktick2-clocktick1);
-    //cout << "idel 2" << idel2 << endl;
-    cout << "at clocktick" << time << " " << studentArrive1 << " students arrive, number of open windows " << windows1 << endl;
+    //cout << "at clocktick" << time << " " << studentArrive1 << " students arrive, number of open windows " << windows1 << endl;
     while (!Windowtime->isEmpty())
     {
       d=d+1;
       windowTime1=Windowtime->peek();
       Windowtime->remove();
-      cout << "student" << d <<" spend " << windowTime1 << " clocktick at window" << d << endl;
+      //cout << "student" << d <<" spend " << windowTime1 << " clocktick at window" << d << endl;
+      //see when the occopied windows will reopen
       reopen=windowTime1+clocktick1;
-      cout << "window " << d <<" will reopen at clocktick " << reopen << endl;
+      //cout << "window " << d <<" will reopen at clocktick " << reopen << endl;
     }
   }
   else if(time==clocktick2)
   {
     windows2=windows1-studentArrive2;
+    //total idel time=idel1+idel2+idel3+idel4+idel5
     idel3=(clocktick3-calcClocktick2)*windows2;
-    cout << "idel3 " << idel3 << endl;
-    cout << "at clocktick" << time << " " << studentArrive2 << "students arrive, number of open windows " << windows2 << endl;
+    //cout << "at clocktick" << time << " " << studentArrive2 << "students arrive, number of open windows " << windows2 << endl;
     while(!Windowtime1->isEmpty())
     {
       d=d+1;
+      //remove the time student will spend at window from queue
       windowTime2=Windowtime1->peek();
       Windowtime1->remove();
-      cout << "student" << d <<" spend " << windowTime2 << " clocktick at window" << d << endl;
+      //cout << "student" << d <<" spend " << windowTime2 << " clocktick at window" << d << endl;
+      //see when the occopied windows will reopen
       reopen1=windowTime2+clocktick2;
-      cout << "window " << d <<" will reopen at clocktick " << reopen1 << endl;
+      //cout << "window " << d <<" will reopen at clocktick " << reopen1 << endl;
       clocktick4=calcClocktick2+windowTime2;
-      cout << "clocktick4 " << clocktick4 << endl;
       idel4=windows1*(clocktick4-clocktick3);
-      cout << "idel4 " << idel4 << endl;
     }
     //calcClocktick4=clocktick4;
   }
-  else if(time==clocktick4)
+  else if(time==clocktick4 && clocktick4!=0)
   //student finish, new windows open
   {
+    //new window open, so add 1 to open window
     windows3=windows1+1;
     idel5=(totaltime-clocktick4)*windows3;
-    cout << "idel5" << idel5 << endl;
+    //mean window idel time
     meanIdel=(idel1+idel2+idel3+idel4+idel5)/windows;
     cout << "mean window idel time " << meanIdel << endl;
     //there are two windows that are idel for the entire time, so longest idel time is equal to total time
@@ -275,10 +283,25 @@ for(time=0; time<=totaltime; time++)
     cout << "the longest window idel time " << realtotal << endl;
     cout << "number of windows wait time for over 5 minutes " << windows3 << endl;
   }
+  //after addressing needs for all students, reach last clocktick
+  else if (time==totaltime)
+  {
+    //check whether there are open windows for the entire 12 clockticks
+    if(windows1>0 && windows2>0 && windows3>0)
+    {
+      //print out student wait time
+      cout << "there is at least one windows open for the entire time, no students have been waiting in line" << endl;
+      cout << "the mean student wait time " << meanWait << endl;
+      cout << "median student wait time " << medianWait << endl;
+      cout << "longest student Wait time " << longestWait << endl;
+      cout << "students waiting for over ten minutes " << overTen << endl;
+    }//end if
+
+  }// end else if
 
 
 
-}
+}// end simulation for 
 
 
 
