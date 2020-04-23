@@ -10,7 +10,7 @@
 EXECUTABLE := assignment4
 
 # the source files to be built
-SOURCES := RegistrarMain.cpp
+SOURCES := RegistrarMain1.cpp
 
 #stuff you don't need to worry about
 INCLUDES := -I ../include
