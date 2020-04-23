@@ -1,7 +1,7 @@
 #include "Queue.cpp"
 #include<fstream>
 
-/** RegistrarMain.cpp
+/** RegistrarMain1.cpp
 * Name: Yuki Chen
 * Student ID: 2320235
 * Email: yingchen@chapman.edu
@@ -18,9 +18,10 @@
 using namespace std;
 
 //this main file get file name from user input
-//cause my docker is not working, and my command line argument used to work when I ran in docker
-//please grade RegistrarMain.cpp (the one with command line argument) if it compiles
-//other wise please grade RegistrarMain1.cpp if RegistrarMain.cpp doesn't compile
+// my command line argument used to work when I ran in docker, but my docker is not working anymore
+//it outputs segmentation fault when i run the program, but might not have any error when you run it in docker
+//please grade RegistrarMain2.cpp (the one with command line argument) if it doesn't output segmentation fault
+//other wise please grade RegistrarMain1.cpp (the one with standard user input)
 int main(int argc, char** argv) {
 
   //string inputfileName= argv[1];
