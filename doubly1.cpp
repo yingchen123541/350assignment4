@@ -1,14 +1,28 @@
+#include "doubly1.h"
+
+/** doubly1.cpp
+* Name: Yuki Chen
+* Student ID: 2320235
+* Email: yingchen@chapman.edu
+*
+* Assignment4  Registrar’s Office Simulation
+* purpose: implement functions to use in double linked list
+* Version 3.0
+* Date: April 22, 2020
+*
+*/
+//constructor
 doubly1::doubly1(){
   //empty List
   size=0;
   front=NULL;
   back=NULL;
 }
-
+//destructor
 doubly1::~doubly1(){
   //build some character
 }
-
+//implement functions 
 unsigned int doubly1::getSize(){
   return size;
 }
